@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Inside of item you can have anything resource that you want, for testing purposes, the colour attribute has been used -->
+    <item android:color="@color/white" android:state_enabled="true"/>
+    <item android:color="@color/colorPrimaryDark" android:state_enabled="false"/>
+</selector>

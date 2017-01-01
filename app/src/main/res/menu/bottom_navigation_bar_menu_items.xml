@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menuItem1"
+        android:enabled="true"
+        android:icon="@drawable/doctor_icon"
+        android:title="Doctor"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menuItem2"
+        android:enabled="true"
+        android:icon="@drawable/patient_icon"
+        android:title="Patient"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menuItem3"
+        android:enabled="true"
+        android:icon="@drawable/heart_sound_icon"
+        android:title="Heart Sound"
+        app:showAsAction="ifRoom"/>
+
+</menu>
