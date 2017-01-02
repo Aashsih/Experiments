@@ -32,6 +32,7 @@ public class HeartSoundMainActivity extends AppCompatActivity {
             }
         });
         mBottomNavigationView.inflateMenu(R.menu.heart_sound_ui_experiments_bottom_navigation_bar_menu_items);
+        mBottomNavigationView.getMenu().findItem(DEFAULT_MENU_ITEM).setChecked(true);
         launchSelectedMenuFragment(mBottomNavigationView.getMenu().findItem(DEFAULT_MENU_ITEM));
         //mBottomNavigationView.setItemBackgroundResource(R.color.colorPrimary);
     }

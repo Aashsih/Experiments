@@ -1,14 +1,25 @@
 package com.head_first.aashi.experiments.heart_sound_ui_experiments;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 
 import com.head_first.aashi.experiments.R;
+import com.head_first.aashi.experiments.utils.ExpandableListAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,9 +29,14 @@ import com.head_first.aashi.experiments.R;
  * Use the {@link MyPatientsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyPatientsFragment extends Fragment {
+public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener{
 
     private View mRootView;
+    private SearchView mSearchView;
+    private ExpandableListView mExpandableListView;
+    private ExpandableListAdapter expandableListAdapter;
+    private HashMap<String, List<String>> filterContentMap;
+    private HashMap<String, List<String>> searchContentMap;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,6 +85,18 @@ public class MyPatientsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.heart_sound_ui_experiments_fragment_my_patients, container, false);
+        setHasOptionsMenu(true);
+
+        //SearchView Setup
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        mSearchView = (SearchView) mRootView.findViewById(R.id.patientSearchView);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setOnCloseListener(this);
+
+        //Populate Data in the ExpandableListView
+        setupExpandableListView();
+
         return mRootView;
     }
 
@@ -109,5 +137,68 @@ public class MyPatientsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    //Utility Methods for the fragment
+    private void setupExpandableListView(){
+        List<String> groupHeaders = new ArrayList<>();
+        groupHeaders.add("Header 1");
+        groupHeaders.add("Header 2");
+        groupHeaders.add("Header 3");
+
+        List<String> groupHeader1Items = new ArrayList<>();
+        groupHeader1Items.add("Item1");
+        groupHeader1Items.add("Item2");
+        groupHeader1Items.add("Item3");
+
+        List<String> groupHeader2Items = new ArrayList<>();
+        groupHeader2Items.add("Item1");
+        groupHeader2Items.add("Item2");
+        groupHeader2Items.add("Item3");
+
+        List<String> groupHeader3Items = new ArrayList<>();
+        groupHeader3Items.add("Item1");
+        groupHeader3Items.add("Item2");
+        groupHeader3Items.add("Item3");
+
+        //This hashMap will actually be created by info that was retrieved from the database based on the filters selected by the user
+        searchContentMap = new HashMap<>();
+        filterContentMap = new HashMap<>();
+        filterContentMap.put(groupHeaders.get(0), groupHeader1Items);
+        filterContentMap.put(groupHeaders.get(1), groupHeader2Items);
+        filterContentMap.put(groupHeaders.get(2), groupHeader3Items);
+
+        //set the content for searchContentMap here
+        PatientSearch.onQueryTextSubmit("", filterContentMap, searchContentMap);
+        expandableListAdapter = new ExpandableListAdapter(getContext(), groupHeaders, searchContentMap);
+        mExpandableListView = (ExpandableListView) mRootView.findViewById(R.id.expandableListView);
+        mExpandableListView.setAdapter(expandableListAdapter);
+    }
+
+    //SearchView onCreateOptionsMenu implementation
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.heart_sound_ui_experiments_search_view_menu, menu);
+    }
+
+    //SearchView.OnQueryTextListener Implementation
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        PatientSearch.onQueryTextSubmit(query, filterContentMap, searchContentMap);
+        expandableListAdapter.notifyDataSetChanged();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        PatientSearch.onQueryTextChange(newText , filterContentMap, searchContentMap);
+        expandableListAdapter.notifyDataSetChanged();
+        return false;
+    }
+
+    //SearchView.OnCloseListener Implementation
+    @Override
+    public boolean onClose() {
+        return false;
     }
 }

@@ -3,4 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- heart_sound_ui_experiments string resource -->
+    <string name="searchMenu">Search</string>
 </resources>
