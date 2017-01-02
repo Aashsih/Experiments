@@ -29,6 +29,8 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class FilterFragment extends Fragment {
+    private final String SEARCH_STRING_TAG = "SEARCH_STRING_TAG";
+    private final String FILTER_CONTENT_MAP_TAG = "FILTER_CONTENT_MAP_TAG";
 
     private View mRootView;
     private TextView mSearchStringView;
@@ -78,13 +80,28 @@ public class FilterFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setRetainInstance(true);
+        if(savedInstanceState != null){
+            if((filterContentMap = (HashMap<String, List<String>>) savedInstanceState.getSerializable(this.FILTER_CONTENT_MAP_TAG)) == null){
+                setupExpandableListView();
+            }
+            if((searchString = savedInstanceState.getString(this.SEARCH_STRING_TAG)) == null){
+                searchString = "";
+            }
+        }
+        else{
+            setupExpandableListView();
+            searchString = "";
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        mRootView = inflater.inflate(R.layout.heart_sound_ui_experiments_fragment_filter_layout, container, false);
+        if(mRootView == null){
+            // Inflate the layout for this fragment
+            mRootView = inflater.inflate(R.layout.heart_sound_ui_experiments_fragment_filter_layout, container, false);
+        }
         //Search bar
         mSearchStringView = (TextView) mRootView.findViewById(R.id.searchString);
         mSearchButton = (Button) mRootView.findViewById(R.id.searchButton);
@@ -96,10 +113,24 @@ public class FilterFragment extends Fragment {
         });
 
         //Expandable Filter
-        setupExpandableListView();
+        mExpandableListFilter = (ExpandableListView) mRootView.findViewById(R.id.expandableFilterView);
+        mExpandableListFilter.setAdapter(expandableFilterAdapter);
+        mExpandableListFilter.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                FilterFragment.this.onFilterClick(parent, v, groupPosition, childPosition, id);
+                return false;
+            }
+        });
 
-        searchString = "";
         return mRootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(this.FILTER_CONTENT_MAP_TAG, filterContentMap);
+        outState.putString(this.SEARCH_STRING_TAG, searchString);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -172,15 +203,7 @@ public class FilterFragment extends Fragment {
         filterContentMap.put(groupHeaders.get(2), groupHeader3Items);
         //set the content for searchContentMap here
         expandableFilterAdapter = new ExpandableListAdapter(getContext(), filterContentMap, R.id.filterListGroup, R.id.filterListItem, R.layout.heart_sound_ui_experiments_expandable_filter_list_group, R.layout.heart_sound_ui_experiments_expandable_filter_list_item);
-        mExpandableListFilter = (ExpandableListView) mRootView.findViewById(R.id.expandableFilterView);
-        mExpandableListFilter.setAdapter(expandableFilterAdapter);
-        mExpandableListFilter.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                FilterFragment.this.onFilterClick(parent, v, groupPosition, childPosition, id);
-                return false;
-            }
-        });
+
     }
 
     private void onFilterClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id){
