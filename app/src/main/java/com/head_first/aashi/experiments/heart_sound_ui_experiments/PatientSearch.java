@@ -33,7 +33,9 @@ public final class PatientSearch {
 
     public static final void onQueryTextSubmit(String query, HashMap<String, List<String>> allContentMap, HashMap<String, List<String>> searchContentMap){
         if(query == null || query == ""){
-            searchContentMap.putAll(allContentMap);
+            if(searchContentMap != null){
+                searchContentMap.putAll(allContentMap);
+            }
             return;
         }
         searchContentMap.clear();

@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.head_first.aashi.experiments.FragmentLauncher;
+import com.head_first.aashi.experiments.utils.FragmentLauncher;
 import com.head_first.aashi.experiments.R;
 
 /**
@@ -50,7 +50,7 @@ public class BottomNavigationBarActivity extends AppCompatActivity {
             default:
 
         }
-        FragmentLauncher.replaceFragmentInActivity(this, R.id.fragmentContainer, menuItemFragment);
+        FragmentLauncher.replaceFragmentInActivity(this.getSupportFragmentManager(), R.id.fragmentContainer, menuItemFragment);
 
     }
 }

@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.head_first.aashi.experiments.heart_sound_ui_experiments.FilterFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/searchString"
+            android:hint="@string/searchStringView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:gravity="center_vertical" />
+
+        <Button
+            android:id="@+id/searchButton"
+            android:text="Button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <ExpandableListView
+        android:id="@+id/expandableFilterView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"></ExpandableListView>
+
+</LinearLayout>

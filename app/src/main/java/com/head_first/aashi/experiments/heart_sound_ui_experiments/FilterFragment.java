@@ -1,23 +1,20 @@
 package com.head_first.aashi.experiments.heart_sound_ui_experiments;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.head_first.aashi.experiments.R;
 import com.head_first.aashi.experiments.utils.ExpandableListAdapter;
-import com.head_first.aashi.experiments.utils.FragmentLauncher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,21 +23,20 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MyPatientsFragment.OnFragmentInteractionListener} interface
+ * {@link FilterFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MyPatientsFragment#newInstance} factory method to
+ * Use the {@link FilterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener{
+public class FilterFragment extends Fragment {
 
-    private Fragment filterFragment;
     private View mRootView;
-    private ImageButton mFilterButton;
-    private SearchView mSearchView;
-    private ExpandableListView mExpandableListView;
-    private ExpandableListAdapter expandableListAdapter;
+    private TextView mSearchStringView;
+    private Button mSearchButton;
+    private ExpandableListView mExpandableListFilter;
+    private ExpandableListAdapter expandableFilterAdapter;
     private HashMap<String, List<String>> filterContentMap;
-    private HashMap<String, List<String>> searchContentMap;
+    private String searchString;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,7 +49,7 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
 
     private OnFragmentInteractionListener mListener;
 
-    public MyPatientsFragment() {
+    public FilterFragment() {
         // Required empty public constructor
     }
 
@@ -63,11 +59,11 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MyPatientsFragment.
+     * @return A new instance of fragment FilterFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyPatientsFragment newInstance(String param1, String param2) {
-        MyPatientsFragment fragment = new MyPatientsFragment();
+    public static FilterFragment newInstance(String param1, String param2) {
+        FilterFragment fragment = new FilterFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -88,29 +84,21 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mRootView = inflater.inflate(R.layout.heart_sound_ui_experiments_fragment_my_patients, container, false);
-
-        //Filter Button
-        mFilterButton = (ImageButton) mRootView.findViewById(R.id.filterButton);
-        mFilterButton.setOnClickListener(new View.OnClickListener() {
+        mRootView = inflater.inflate(R.layout.heart_sound_ui_experiments_fragment_filter_layout, container, false);
+        //Search bar
+        mSearchStringView = (TextView) mRootView.findViewById(R.id.searchString);
+        mSearchButton = (Button) mRootView.findViewById(R.id.searchButton);
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchFilterFragment();
+                //Fetch Data from the database or create a HashMap based on the filters applied
             }
         });
 
-        //SearchView Setup
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        mSearchView = (SearchView) mRootView.findViewById(R.id.patientSearchView);
-        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        mSearchView.setOnQueryTextListener(this);
-        mSearchView.setOnCloseListener(this);
-
-        //Populate Data in the ExpandableListView
+        //Expandable Filter
         setupExpandableListView();
 
-        setHasOptionsMenu(true);
-
+        searchString = "";
         return mRootView;
     }
 
@@ -175,54 +163,55 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
         groupHeader3Items.add("Item2");
         groupHeader3Items.add("Item3");
 
-        //This hashMap will actually be created by info that was retrieved from the database based on the filters selected by the user
-        searchContentMap = new HashMap<>();
+        //This hashMap will actually be created by info that was retrieved from the database based on
+        //The Study table and the DoctorsPatient table (this one will determine which Doctors shared)
+        //a Patient with the current user.
         filterContentMap = new HashMap<>();
         filterContentMap.put(groupHeaders.get(0), groupHeader1Items);
         filterContentMap.put(groupHeaders.get(1), groupHeader2Items);
         filterContentMap.put(groupHeaders.get(2), groupHeader3Items);
         //set the content for searchContentMap here
-        PatientSearch.onQueryTextSubmit("", filterContentMap, searchContentMap);
-        expandableListAdapter = new ExpandableListAdapter(getContext(), searchContentMap, R.id.patientListGroup, R.id.patientListItem, R.layout.heart_sound_ui_experiments_expandable_patient_list_group, R.layout.heart_sound_ui_experiments_expandable_patient_list_item);
-        mExpandableListView = (ExpandableListView) mRootView.findViewById(R.id.expandableListView);
-        mExpandableListView.setAdapter(expandableListAdapter);
+        expandableFilterAdapter = new ExpandableListAdapter(getContext(), filterContentMap, R.id.filterListGroup, R.id.filterListItem, R.layout.heart_sound_ui_experiments_expandable_filter_list_group, R.layout.heart_sound_ui_experiments_expandable_filter_list_item);
+        mExpandableListFilter = (ExpandableListView) mRootView.findViewById(R.id.expandableFilterView);
+        mExpandableListFilter.setAdapter(expandableFilterAdapter);
+        mExpandableListFilter.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                FilterFragment.this.onFilterClick(parent, v, groupPosition, childPosition, id);
+                return false;
+            }
+        });
     }
 
-    private void launchFilterFragment(){
-        if(filterFragment == null){
-            filterFragment = new FilterFragment();
+    private void onFilterClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id){
+        CheckBox filter = (CheckBox) view.findViewById(R.id.filterListItem);
+        String filterName = filter.getText().toString();
+        if(filter.isChecked()){
+            boolean searchStringStartsWithFilterName = searchString.toLowerCase().startsWith(filterName.toLowerCase());
+            if(searchStringStartsWithFilterName){
+                if(searchString.contains(",")){
+                    searchString = searchString.replace(filterName + ",","");
+                }
+                else{
+                    searchString = searchString.replace(filterName,"");
+                }
+
+            }
+            else{
+                searchString = searchString.replace("," + filterName,"");
+            }
+            filter.setChecked(false);
         }
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, filterFragment)
-                .addToBackStack(null)
-                .commit();
+        else{
+            if(searchString.isEmpty()){
+                searchString += filterName;
+            }
+            else{
+                searchString += "," + filterName;
+            }
+            filter.setChecked(true);
+        }
+        mSearchStringView.setText(searchString);
     }
 
-    //SearchView onCreateOptionsMenu implementation
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.heart_sound_ui_experiments_search_view_menu, menu);
-    }
-
-    //SearchView.OnQueryTextListener Implementation
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        PatientSearch.onQueryTextSubmit(query, filterContentMap, searchContentMap);
-        expandableListAdapter.notifyDataSetChanged();
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        PatientSearch.onQueryTextChange(newText , filterContentMap, searchContentMap);
-        expandableListAdapter.notifyDataSetChanged();
-        return false;
-    }
-
-    //SearchView.OnCloseListener Implementation
-    @Override
-    public boolean onClose() {
-        return false;
-    }
 }

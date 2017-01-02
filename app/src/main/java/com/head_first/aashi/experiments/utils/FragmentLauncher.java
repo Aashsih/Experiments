@@ -1,4 +1,4 @@
-package com.head_first.aashi.experiments;
+package com.head_first.aashi.experiments.utils;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
@@ -12,9 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 
 public final class FragmentLauncher {
 
-    public static void replaceFragmentInActivity(AppCompatActivity appCompatActivity, int containerId, Fragment fragment){
+    public static void replaceFragmentInActivity(FragmentManager fragmentManager, int containerId, Fragment fragment){
         //Create new fragment transaction
-        FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         //Replace whatever is in the fragment container

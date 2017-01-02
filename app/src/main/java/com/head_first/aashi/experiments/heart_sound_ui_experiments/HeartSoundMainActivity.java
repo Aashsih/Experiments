@@ -7,11 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.head_first.aashi.experiments.FragmentLauncher;
+import com.head_first.aashi.experiments.utils.FragmentLauncher;
 import com.head_first.aashi.experiments.R;
-import com.head_first.aashi.experiments.bottom_navigation_bar.MenuItem1Fragmet;
-import com.head_first.aashi.experiments.bottom_navigation_bar.MenuItem2Fragment;
-import com.head_first.aashi.experiments.bottom_navigation_bar.MenuItem3Fragment;
 
 public class HeartSoundMainActivity extends AppCompatActivity {
 
@@ -53,7 +50,7 @@ public class HeartSoundMainActivity extends AppCompatActivity {
                 break;
 
         }
-        FragmentLauncher.replaceFragmentInActivity(this, R.id.fragmentContainer, menuItemFragment);
+        FragmentLauncher.replaceFragmentInActivity(this.getSupportFragmentManager(), R.id.fragmentContainer, menuItemFragment);
 
     }
 }
