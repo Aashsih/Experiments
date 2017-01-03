@@ -3,6 +3,7 @@ package com.head_first.aashi.experiments.heart_sound_ui_experiments;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Objects;
 
 public final class PatientSearch {
 
-    public static final void onQueryTextChange(String query, HashMap<String, List<String>> allContentMap, HashMap<String, List<String>> searchContentMap){
+    public static final void onQueryTextChange(String query, Map<String, List<String>> allContentMap, HashMap<String, List<String>> searchContentMap){
         if(query == null || query == ""){
             searchContentMap.putAll(allContentMap);
             return;

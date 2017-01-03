@@ -166,14 +166,14 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
         groupHeader1Items.add("Item3");
 
         List<String> groupHeader2Items = new ArrayList<>();
-        groupHeader2Items.add("Item1");
-        groupHeader2Items.add("Item2");
-        groupHeader2Items.add("Item3");
+        groupHeader2Items.add("Item4");
+        groupHeader2Items.add("Item5");
+        groupHeader2Items.add("Item6");
 
         List<String> groupHeader3Items = new ArrayList<>();
-        groupHeader3Items.add("Item1");
-        groupHeader3Items.add("Item2");
-        groupHeader3Items.add("Item3");
+        groupHeader3Items.add("Item7");
+        groupHeader3Items.add("Item8");
+        groupHeader3Items.add("Item9");
 
         //This hashMap will actually be created by info that was retrieved from the database based on the filters selected by the user
         searchContentMap = new HashMap<>();
