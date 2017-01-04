@@ -1,4 +1,4 @@
-package com.head_first.aashi.experiments.heart_sound_ui_experiments;
+package com.head_first.aashi.experiments.heart_sound_ui_experiments.controller;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.head_first.aashi.experiments.heart_sound_ui_experiments.MyPatientsFragment">
+    tools:context="com.head_first.aashi.experiments.heart_sound_ui_experiments.controller.MyPatientsFragment">
 
     <LinearLayout
         android:orientation="horizontal"

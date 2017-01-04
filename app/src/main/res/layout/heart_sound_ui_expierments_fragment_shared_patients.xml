@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.head_first.aashi.experiments.heart_sound_ui_experiments.SharedPatientsFragment">
+    tools:context="com.head_first.aashi.experiments.heart_sound_ui_experiments.controller.SharedPatientsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ExpandableListView

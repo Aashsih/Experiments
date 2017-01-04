@@ -1,4 +1,4 @@
-package com.head_first.aashi.experiments.heart_sound_ui_experiments;
+package com.head_first.aashi.experiments.heart_sound_ui_experiments.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

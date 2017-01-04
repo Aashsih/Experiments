@@ -1,4 +1,4 @@
-package com.head_first.aashi.experiments.heart_sound_ui_experiments;
+package com.head_first.aashi.experiments.heart_sound_ui_experiments.controller;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,12 +13,12 @@ import com.head_first.aashi.experiments.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link UserProfileFragment.OnFragmentInteractionListener} interface
+ * {@link SharedPatientsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link UserProfileFragment#newInstance} factory method to
+ * Use the {@link SharedPatientsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserProfileFragment extends Fragment {
+public class SharedPatientsFragment extends Fragment {
 
     private View mRootView;
 
@@ -33,7 +33,7 @@ public class UserProfileFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public UserProfileFragment() {
+    public SharedPatientsFragment() {
         // Required empty public constructor
     }
 
@@ -43,11 +43,11 @@ public class UserProfileFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment UserProfileFragment.
+     * @return A new instance of fragment SharedPatientsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static UserProfileFragment newInstance(String param1, String param2) {
-        UserProfileFragment fragment = new UserProfileFragment();
+    public static SharedPatientsFragment newInstance(String param1, String param2) {
+        SharedPatientsFragment fragment = new SharedPatientsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,7 +68,7 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mRootView = inflater.inflate(R.layout.heart_sound_ui_experiments_fragment_user_profile, container, false);
+        mRootView = inflater.inflate(R.layout.heart_sound_ui_expierments_fragment_shared_patients, container, false);
         return mRootView;
     }
 

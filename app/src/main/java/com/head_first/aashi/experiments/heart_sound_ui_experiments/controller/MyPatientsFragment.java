@@ -1,4 +1,4 @@
-package com.head_first.aashi.experiments.heart_sound_ui_experiments;
+package com.head_first.aashi.experiments.heart_sound_ui_experiments.controller;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -16,12 +16,14 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 
 import com.head_first.aashi.experiments.R;
-import com.head_first.aashi.experiments.utils.ExpandableListAdapter;
-import com.head_first.aashi.experiments.utils.FragmentLauncher;
+import com.head_first.aashi.experiments.heart_sound_ui_experiments.model.Filter;
+import com.head_first.aashi.experiments.heart_sound_ui_experiments.model.PatientSearch;
+import com.head_first.aashi.experiments.utils.ExpandablePatientListAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,16 +33,43 @@ import java.util.List;
  * Use the {@link MyPatientsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+/**
+ * The Filter model is instantiated in the constructor with an empty string and empt filterContent
+ * In the onCreateView() method of this Fragment:
+ * The searchString from the Filter Model is used to fetch information from the database and populate the models for Students and Patients
+ * in this Fragment.
+ * This Fragment should receive or initialize a model of Type User which will be used to fetch the list of Shared Doctors for the fitlerContent in the Filter Model
+ *
+ *
+ * The Filter model is is passed to the FilterFragment in the Bundle.
+ * In the FilterFragment use that filterContent to initialize the expandableListViewAdapter.
+ */
 public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener{
+
+    private static final String DEFAULT_SEARCH_STRING = "";
 
     private Fragment filterFragment;
     private View mRootView;
     private ImageButton mFilterButton;
     private SearchView mSearchView;
     private ExpandableListView mExpandableListView;
-    private ExpandableListAdapter expandableListAdapter;
-    private HashMap<String, List<String>> filterContentMap;
-    private HashMap<String, List<String>> searchContentMap;
+    private ExpandablePatientListAdapter expandablePatientListAdapter;
+
+    //Data for the fragment
+    private Filter filter;
+    private String oldFilterString; //this is made equal to the filter String from filter.getSearchString() before the view of this fragment is destroyed
+    //There will be a few more data structures here that will store the information from the Database, more specifically
+    //Information about Patient and Study.
+    //The Study model along with Patient model will be used to create the HashMap<String, Patient> in the Filter Model
+    //That HashMap will have all the information that the app requires based on the FilterFragment.
+    //Another HashMap will be created from the previous one which will contain all the information based on the
+    //search filter in this fragment.
+
+    //This Map gets it information from the filterContent of the Filter Model
+    //it is basially its replica apart from the fact that the groupItems here are String instead of Filter.GroupItem
+    private LinkedHashMap<String, List<String>> filterContentMap;
+    private LinkedHashMap<String, List<String>> searchContentMap;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,7 +83,7 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
     private OnFragmentInteractionListener mListener;
 
     public MyPatientsFragment() {
-        // Required empty public constructor
+        filter = new Filter(DEFAULT_SEARCH_STRING);
     }
 
     /**
@@ -82,11 +111,20 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        oldFilterString = "null";
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(!oldFilterString.equals(filter.getSearchString())){
+            //Load all the models over here
+
+            //after the models are loaded, load the filterContent in the Filter Model
+            filter.populateFilterContent();//Pass in the required models as parameters
+            filterContentMap = getFilterContentMap(filter.getFilterContent());
+            setupSearchContent();
+        }
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.heart_sound_ui_experiments_fragment_my_patients, container, false);
 
@@ -106,9 +144,10 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setOnCloseListener(this);
 
-        //Populate Data in the ExpandableListView
-        setupExpandableListView();
-
+        //Setup ExpandableListView
+        expandablePatientListAdapter = new ExpandablePatientListAdapter(getContext(), searchContentMap);
+        mExpandableListView = (ExpandableListView) mRootView.findViewById(R.id.expandableListView);
+        mExpandableListView.setAdapter(expandablePatientListAdapter);
         setHasOptionsMenu(true);
 
         return mRootView;
@@ -133,6 +172,12 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
     }
 
     @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        oldFilterString = filter.getSearchString();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -153,8 +198,24 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
         void onFragmentInteraction(Uri uri);
     }
 
+    private void launchFilterFragment(){
+        oldFilterString = filter.getSearchString();
+        if(filterFragment == null){
+            filterFragment = new FilterFragment();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(FilterFragment.FILTER_CONTENT_MAP_TAG, filter);
+        filterFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, filterFragment)
+                .addToBackStack(null)
+                .commit();
+    }
     //Utility Methods for the fragment
-    private void setupExpandableListView(){
+    private void setupSearchContent(){
+        searchContentMap = new LinkedHashMap<>();
+
         List<String> groupHeaders = new ArrayList<>();
         groupHeaders.add("Header 1");
         groupHeaders.add("Header 2");
@@ -175,29 +236,24 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
         groupHeader3Items.add("Item8");
         groupHeader3Items.add("Item9");
 
-        //This hashMap will actually be created by info that was retrieved from the database based on the filters selected by the user
-        searchContentMap = new HashMap<>();
-        filterContentMap = new HashMap<>();
-        filterContentMap.put(groupHeaders.get(0), groupHeader1Items);
-        filterContentMap.put(groupHeaders.get(1), groupHeader2Items);
-        filterContentMap.put(groupHeaders.get(2), groupHeader3Items);
         //set the content for searchContentMap here
         PatientSearch.onQueryTextSubmit("", filterContentMap, searchContentMap);
-        expandableListAdapter = new ExpandableListAdapter(getContext(), searchContentMap, R.id.patientListGroup, R.id.patientListItem, R.layout.heart_sound_ui_experiments_expandable_patient_list_group, R.layout.heart_sound_ui_experiments_expandable_patient_list_item);
-        mExpandableListView = (ExpandableListView) mRootView.findViewById(R.id.expandableListView);
-        mExpandableListView.setAdapter(expandableListAdapter);
+
     }
 
-    private void launchFilterFragment(){
-        if(filterFragment == null){
-            filterFragment = new FilterFragment();
+    private LinkedHashMap<String, List<String>> getFilterContentMap(Map<String, List<Filter.GroupItem>> filterContent){
+        LinkedHashMap<String, List<String>> filterContentMap = new LinkedHashMap<>();
+        for(String groupHeader : filter.getFilterContent().keySet()){
+            List<String> groupItems = new ArrayList<>();
+            for(Filter.GroupItem groupItem : filter.getFilterContent().get(groupHeader)){
+                groupItems.add(groupItem.getItemName());
+            }
+            filterContentMap.put(groupHeader, groupItems);
         }
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, filterFragment)
-                .addToBackStack(null)
-                .commit();
+        return filterContentMap;
     }
+
+
 
     //SearchView onCreateOptionsMenu implementation
     @Override
@@ -209,14 +265,14 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public boolean onQueryTextSubmit(String query) {
         PatientSearch.onQueryTextSubmit(query, filterContentMap, searchContentMap);
-        expandableListAdapter.notifyDataSetChanged();
+        expandablePatientListAdapter.notifyDataSetChanged();
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
         PatientSearch.onQueryTextChange(newText , filterContentMap, searchContentMap);
-        expandableListAdapter.notifyDataSetChanged();
+        expandablePatientListAdapter.notifyDataSetChanged();
         return false;
     }
 

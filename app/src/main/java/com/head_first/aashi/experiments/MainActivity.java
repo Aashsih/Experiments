@@ -4,8 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.head_first.aashi.experiments.bottom_navigation_bar.BottomNavigationBarActivity;
-import com.head_first.aashi.experiments.heart_sound_ui_experiments.HeartSoundMainActivity;
+import com.head_first.aashi.experiments.heart_sound_ui_experiments.controller.HeartSoundMainActivity;
 
 public class MainActivity extends AppCompatActivity {
 

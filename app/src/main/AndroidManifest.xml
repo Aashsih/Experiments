@@ -37,7 +37,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".heart_sound_ui_experiments.HeartSoundMainActivity"></activity>
+        <activity android:name=".heart_sound_ui_experiments.controller.HeartSoundMainActivity"></activity>
     </application>
 
 </manifest>
