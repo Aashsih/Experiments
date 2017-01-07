@@ -6,6 +6,7 @@
 
     <!-- heart_sound_ui_experiments string resource -->
     <string name="searchMenu">Search</string>
-    <string name="searchStringView">Search String</string>
+    <string name="filterStringView">Filters Selected</string>
     <string name="searchButton">Search</string>
+    <string name="filterSearch">Filter Items</string>
 </resources>

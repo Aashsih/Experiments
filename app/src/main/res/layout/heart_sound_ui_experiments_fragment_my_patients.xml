@@ -4,20 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.head_first.aashi.experiments.heart_sound_ui_experiments.controller.MyPatientsFragment">
+    tools:context="com.head_first.aashi.experiments.heart_sound_ui_experiments.controller.Patients">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.SearchView
-            android:id="@+id/patientSearchView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:iconifiedByDefault="true"
-            android:layout_weight="5"
-            android:layout_gravity="top|left"></android.support.v7.widget.SearchView>
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <ImageButton
             android:id="@+id/filterButton"
@@ -25,13 +18,31 @@
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_menu_edit"
             android:layout_weight="1"
+            android:layout_gravity="top|left" />
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/patientSearchView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="true"
+            android:layout_weight="6"
+            android:layout_gravity="top|left"></android.support.v7.widget.SearchView>
+
+        <ImageButton
+            android:id="@+id/addPatient"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:layout_weight="1"
             android:layout_gravity="top|right" />
+
     </LinearLayout>
 
     <ExpandableListView
         android:id="@+id/expandableListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ExpandableListView>
+        android:layout_height="wrap_content"
+        android:layout_weight="5"></ExpandableListView>
 
 
 </LinearLayout>

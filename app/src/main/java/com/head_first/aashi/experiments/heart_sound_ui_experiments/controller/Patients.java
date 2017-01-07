@@ -5,8 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 
 import com.head_first.aashi.experiments.R;
 import com.head_first.aashi.experiments.heart_sound_ui_experiments.model.Filter;
-import com.head_first.aashi.experiments.heart_sound_ui_experiments.model.PatientSearch;
+import com.head_first.aashi.experiments.heart_sound_ui_experiments.model.SearchBar;
 import com.head_first.aashi.experiments.utils.ExpandablePatientListAdapter;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ import java.util.Map;
  * The Filter model is is passed to the FilterFragment in the Bundle.
  * In the FilterFragment use that filterContent to initialize the expandableListViewAdapter.
  */
-public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener{
+public class Patients extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener{
 
     private static final String DEFAULT_SEARCH_STRING = "";
 
@@ -53,6 +53,7 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
     private View mRootView;
     private ImageButton mFilterButton;
     private SearchView mSearchView;
+    private ImageButton mAddNewPatient;
     private ExpandableListView mExpandableListView;
     private ExpandablePatientListAdapter expandablePatientListAdapter;
 
@@ -70,6 +71,7 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
     //it is basially its replica apart from the fact that the groupItems here are String instead of Filter.GroupItem
     private LinkedHashMap<String, List<String>> filterContentMap;
     private LinkedHashMap<String, List<String>> searchContentMap;
+    private boolean myPatientClicked;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -82,8 +84,9 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
 
     private OnFragmentInteractionListener mListener;
 
-    public MyPatientsFragment() {
+    public Patients() {
         filter = new Filter(DEFAULT_SEARCH_STRING);
+        myPatientClicked = true;
     }
 
     /**
@@ -92,11 +95,11 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MyPatientsFragment.
+     * @return A new instance of fragment Patients.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyPatientsFragment newInstance(String param1, String param2) {
-        MyPatientsFragment fragment = new MyPatientsFragment();
+    public static Patients newInstance(String param1, String param2) {
+        Patients fragment = new Patients();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -118,15 +121,15 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if(!oldFilterString.equals(filter.getSearchString())){
-            //Load all the models over here
-
-            //after the models are loaded, load the filterContent in the Filter Model
-            filter.populateFilterContent();//Pass in the required models as parameters
-            filterContentMap = getFilterContentMap(filter.getFilterContent());
-            setupSearchContent();
+            setUpDataForViews();
         }
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.heart_sound_ui_experiments_fragment_my_patients, container, false);
+
+        if(!myPatientClicked){
+            mAddNewPatient = (ImageButton) mRootView.findViewById(R.id.addPatient);
+            mAddNewPatient.setVisibility(View.INVISIBLE);
+        }
 
         //Filter Button
         mFilterButton = (ImageButton) mRootView.findViewById(R.id.filterButton);
@@ -198,6 +201,35 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
         void onFragmentInteraction(Uri uri);
     }
 
+    public void setMyPatientClicked(boolean myPatientClicked){
+        this.myPatientClicked = myPatientClicked;
+    }
+
+    public boolean isMyPatientClicked(){
+        return this.myPatientClicked;
+    }
+
+    private void setUpDataForViews(){
+        //Load all the models over here based on myPatientClicked
+        if(myPatientClicked){
+            //Load models for MyPatients
+            int x = 0;
+            x++;
+        }
+        else{
+            //Load models for SharedPatients
+            int x = 0;
+            x++;
+        }
+        //after the models are loaded, load the filterContent in the Filter Model
+        filter.populateFilterContent(myPatientClicked);//Pass in the required models as parameters
+        // the models will be usd to populate the filterContentMap and not filter.filterContent
+        //this is just used temporarily
+        filterContentMap = getFilterContentMap(filter.getFilterContent());
+        setupSearchContent();//This will get content from models.
+    }
+
+
     private void launchFilterFragment(){
         oldFilterString = filter.getSearchString();
         if(filterFragment == null){
@@ -206,38 +238,20 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
         Bundle bundle = new Bundle();
         bundle.putSerializable(FilterFragment.FILTER_CONTENT_MAP_TAG, filter);
         filterFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
+        getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, filterFragment)
                 .addToBackStack(null)
                 .commit();
     }
     //Utility Methods for the fragment
     private void setupSearchContent(){
-        searchContentMap = new LinkedHashMap<>();
-
-        List<String> groupHeaders = new ArrayList<>();
-        groupHeaders.add("Header 1");
-        groupHeaders.add("Header 2");
-        groupHeaders.add("Header 3");
-
-        List<String> groupHeader1Items = new ArrayList<>();
-        groupHeader1Items.add("Item1");
-        groupHeader1Items.add("Item2");
-        groupHeader1Items.add("Item3");
-
-        List<String> groupHeader2Items = new ArrayList<>();
-        groupHeader2Items.add("Item4");
-        groupHeader2Items.add("Item5");
-        groupHeader2Items.add("Item6");
-
-        List<String> groupHeader3Items = new ArrayList<>();
-        groupHeader3Items.add("Item7");
-        groupHeader3Items.add("Item8");
-        groupHeader3Items.add("Item9");
-
+        if(searchContentMap == null){
+            searchContentMap = new LinkedHashMap<>();
+        }
+        searchContentMap.clear();
+        searchContentMap.putAll(filterContentMap);
         //set the content for searchContentMap here
-        PatientSearch.onQueryTextSubmit("", filterContentMap, searchContentMap);
+        //SearchBar.onQueryTextSubmit("", filterContentMap, searchContentMap);
 
     }
 
@@ -264,14 +278,14 @@ public class MyPatientsFragment extends Fragment implements SearchView.OnQueryTe
     //SearchView.OnQueryTextListener Implementation
     @Override
     public boolean onQueryTextSubmit(String query) {
-        PatientSearch.onQueryTextSubmit(query, filterContentMap, searchContentMap);
+        SearchBar.onQueryTextSubmit(query, filterContentMap, searchContentMap);
         expandablePatientListAdapter.notifyDataSetChanged();
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        PatientSearch.onQueryTextChange(newText , filterContentMap, searchContentMap);
+        SearchBar.onQueryTextChange(newText , filterContentMap, searchContentMap);
         expandablePatientListAdapter.notifyDataSetChanged();
         return false;
     }

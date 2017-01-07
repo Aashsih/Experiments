@@ -1,10 +1,14 @@
 package com.head_first.aashi.experiments.heart_sound_ui_experiments.controller;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,7 +17,13 @@ import android.widget.TextView;
 
 import com.head_first.aashi.experiments.R;
 import com.head_first.aashi.experiments.heart_sound_ui_experiments.model.Filter;
+import com.head_first.aashi.experiments.heart_sound_ui_experiments.model.SearchBar;
 import com.head_first.aashi.experiments.utils.ExpandableFilterListAdapter;
+
+import java.security.acl.Group;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,12 +33,13 @@ import com.head_first.aashi.experiments.utils.ExpandableFilterListAdapter;
  * Use the {@link FilterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FilterFragment extends Fragment {
+public class FilterFragment extends Fragment implements SearchView.OnQueryTextListener, SearchView.OnCloseListener{
 
     public static final String FILTER_CONTENT_MAP_TAG = "FILTER_CONTENT_MAP_TAG";
 
     //View related variables
     private View mRootView;
+    private SearchView mSearchView;
     private TextView mSearchStringView;
     private Button mSearchButton;
     private ExpandableListView mExpandableListFilter;
@@ -36,7 +47,7 @@ public class FilterFragment extends Fragment {
 
     //Data for the Fragment
     private Filter filter;
-
+    private Map<String, List<Filter.GroupItem>> searchFilterContent;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -82,7 +93,8 @@ public class FilterFragment extends Fragment {
         if (bundle != null) {
             //Get the filter object from the Fragment that launched this
             if((filter =(Filter) bundle.getSerializable(FILTER_CONTENT_MAP_TAG)) != null){
-
+                searchFilterContent = new LinkedHashMap<>();
+                searchFilterContent.putAll(filter.getFilterContent());
             }
             else{
                 //Throw an exception here
@@ -100,8 +112,14 @@ public class FilterFragment extends Fragment {
             // Inflate the layout for this fragment
             mRootView = inflater.inflate(R.layout.heart_sound_ui_experiments_fragment_filter_layout, container, false);
         }
+        //SearchView Setup
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        mSearchView = (SearchView) mRootView.findViewById(R.id.filterItems);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setOnCloseListener(this);
         //Search bar
-        mSearchStringView = (TextView) mRootView.findViewById(R.id.searchString);
+        mSearchStringView = (TextView) mRootView.findViewById(R.id.filterString);
         mSearchStringView.setText(filter.getSearchString());
         mSearchButton = (Button) mRootView.findViewById(R.id.searchButton);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +132,7 @@ public class FilterFragment extends Fragment {
 
         //Expandable Filter
         mExpandableListFilter = (ExpandableListView) mRootView.findViewById(R.id.expandableFilterView);
-        expandableFilterAdapter = new ExpandableFilterListAdapter(getContext(), filter.getFilterContent());
+        expandableFilterAdapter = new ExpandableFilterListAdapter(getContext(), searchFilterContent);
         mExpandableListFilter.setAdapter(expandableFilterAdapter);
         mExpandableListFilter.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -178,7 +196,32 @@ public class FilterFragment extends Fragment {
         mSearchStringView.setText(filter.getSearchString());
     }
 
+    //SearchView onCreateOptionsMenu implementation
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.heart_sound_ui_experiments_search_view_menu, menu);
+    }
 
+    //SearchView.OnQueryTextListener Implementation
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        SearchBar.onQueryTextSubmit(query, filter.getFilterContent(), searchFilterContent);
+        expandableFilterAdapter.notifyDataSetChanged();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        SearchBar.onQueryTextChange(newText , filter.getFilterContent(), searchFilterContent);
+        expandableFilterAdapter.notifyDataSetChanged();
+        return false;
+    }
+
+    //SearchView.OnCloseListener Implementation
+    @Override
+    public boolean onClose() {
+        return false;
+    }
 }
 
 //    private void restoreExpandableListViewState(){

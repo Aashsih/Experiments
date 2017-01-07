@@ -30,78 +30,149 @@ public class Filter implements Serializable{
     }
 
     //This method will take in all the models required to populate the information
-    public final void populateFilterContent(){
+    public final void populateFilterContent(boolean temp){
         //remember to set the items that are mentioned in the searchString as true
-        //ssly remember to set the items that are mentioned in the searchString as true
-        //Dont forget!!!!! Set the items that are mentioned in the searchString as true
+        //the method above will be more time consuming. A better way will be
+        //to check if the new item fetched from the data base at a position is the same as the one that already exists, if so then dont change anything
+        //otherwise add or remove the entry.
         List<String> groupHeaders = new ArrayList<>();
-        groupHeaders.add("Header 1");
-        groupHeaders.add("Header 2");
-        groupHeaders.add("Header 3");
-        String[] itemFilters = StringUtil.split(this.searchString, SEARCH_STRING_GROUP_HEADER_SEPARATOR.charAt(0));
         List<GroupItem> groupHeader1Items = new ArrayList<>();
-        if(itemFilters[0].contains("Item1")){
-            groupHeader1Items.add(new GroupItem("Item1", true));
-        }
-        else{
-            groupHeader1Items.add(new GroupItem("Item1", false));
-        }
-        if(itemFilters[0].contains("Item2")){
-            groupHeader1Items.add(new GroupItem("Item2", true));
-        }
-        else{
-            groupHeader1Items.add(new GroupItem("Item2", false));
-        }
-        if(itemFilters[0].contains("Item3")){
-            groupHeader1Items.add(new GroupItem("Item3", true));
-        }
-        else{
-            groupHeader1Items.add(new GroupItem("Item3", false));
-        }
-
-
         List<GroupItem> groupHeader2Items = new ArrayList<>();
-        if(itemFilters[0].contains("Item1")){
-            groupHeader2Items.add(new GroupItem("Item1", true));
-        }
-        else{
-            groupHeader2Items.add(new GroupItem("Item1", false));
-        }
-        if(itemFilters[0].contains("Item2")){
-            groupHeader2Items.add(new GroupItem("Item2", true));
-        }
-        else{
-            groupHeader2Items.add(new GroupItem("Item2", false));
-        }
-        if(itemFilters[0].contains("Item3")){
-            groupHeader2Items.add(new GroupItem("Item3", true));
-        }
-        else{
-            groupHeader2Items.add(new GroupItem("Item3", false));
-        }
-
         List<GroupItem> groupHeader3Items = new ArrayList<>();
-        if(itemFilters[0].contains("Item1")){
-            groupHeader3Items.add(new GroupItem("Item1", true));
+        if(temp){
+            groupHeaders.add("Patient 1");
+            groupHeaders.add("Patient 2");
+            groupHeaders.add("Patient 3");
+            String[] itemFilters = StringUtil.split(this.searchString, SEARCH_STRING_GROUP_HEADER_SEPARATOR.charAt(0));
+
+            if(itemFilters[0].contains("Item1")){
+                groupHeader1Items.add(new GroupItem("Item1", true));
+            }
+            else{
+                groupHeader1Items.add(new GroupItem("Item1", false));
+            }
+            if(itemFilters[0].contains("Item2")){
+                groupHeader1Items.add(new GroupItem("Item2", true));
+            }
+            else{
+                groupHeader1Items.add(new GroupItem("Item2", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader1Items.add(new GroupItem("Item3", true));
+            }
+            else{
+                groupHeader1Items.add(new GroupItem("Item3", false));
+            }
+
+            if(itemFilters[0].contains("Item1")){
+                groupHeader2Items.add(new GroupItem("Item1", true));
+            }
+            else{
+                groupHeader2Items.add(new GroupItem("Item1", false));
+            }
+            if(itemFilters[0].contains("Item2")){
+                groupHeader2Items.add(new GroupItem("Item2", true));
+            }
+            else{
+                groupHeader2Items.add(new GroupItem("Item2", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader2Items.add(new GroupItem("Item3", true));
+            }
+            else{
+                groupHeader2Items.add(new GroupItem("Item3", false));
+            }
+
+
+            if(itemFilters[0].contains("Item1")){
+                groupHeader3Items.add(new GroupItem("Item1", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item1", false));
+            }
+            if(itemFilters[0].contains("Item2")){
+                groupHeader3Items.add(new GroupItem("Item2", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item2", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item3", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item3", false));
+            }
         }
         else{
-            groupHeader3Items.add(new GroupItem("Item1", false));
-        }
-        if(itemFilters[0].contains("Item2")){
-            groupHeader3Items.add(new GroupItem("Item2", true));
-        }
-        else{
-            groupHeader3Items.add(new GroupItem("Item2", false));
-        }
-        if(itemFilters[0].contains("Item3")){
-            groupHeader3Items.add(new GroupItem("Item3", true));
-        }
-        else{
-            groupHeader3Items.add(new GroupItem("Item3", false));
+            groupHeaders.add("Shared Patient 1");
+            groupHeaders.add("Shared Patient 2");
+            groupHeaders.add("Shared Patient 3");
+            String[] itemFilters = StringUtil.split(this.searchString, SEARCH_STRING_GROUP_HEADER_SEPARATOR.charAt(0));
+
+            if(itemFilters[0].contains("Item1")){
+                groupHeader1Items.add(new GroupItem("Item1", true));
+            }
+            else{
+                groupHeader1Items.add(new GroupItem("Item1", false));
+            }
+            if(itemFilters[0].contains("Item2")){
+                groupHeader1Items.add(new GroupItem("Item2", true));
+            }
+            else{
+                groupHeader1Items.add(new GroupItem("Item2", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader1Items.add(new GroupItem("Item3", true));
+            }
+            else{
+                groupHeader1Items.add(new GroupItem("Item3", false));
+            }
+
+
+
+            if(itemFilters[0].contains("Item1")){
+                groupHeader2Items.add(new GroupItem("Item1", true));
+            }
+            else{
+                groupHeader2Items.add(new GroupItem("Item1", false));
+            }
+            if(itemFilters[0].contains("Item2")){
+                groupHeader2Items.add(new GroupItem("Item2", true));
+            }
+            else{
+                groupHeader2Items.add(new GroupItem("Item2", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader2Items.add(new GroupItem("Item3", true));
+            }
+            else{
+                groupHeader2Items.add(new GroupItem("Item3", false));
+            }
+
+
+            if(itemFilters[0].contains("Item1")){
+                groupHeader3Items.add(new GroupItem("Item1", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item1", false));
+            }
+            if(itemFilters[0].contains("Item2")){
+                groupHeader3Items.add(new GroupItem("Item2", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item2", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item3", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item3", false));
+            }
         }
         //This hashMap will actually be created by info that was retrieved from the database based on
         //The Study table and the DoctorsPatient table (this one will determine which Doctors shared)
         //a Patient with the current user.
+        filterContent.clear();
         filterContent.put(groupHeaders.get(0), groupHeader1Items);
         filterContent.put(groupHeaders.get(1), groupHeader2Items);
         filterContent.put(groupHeaders.get(2), groupHeader3Items);
