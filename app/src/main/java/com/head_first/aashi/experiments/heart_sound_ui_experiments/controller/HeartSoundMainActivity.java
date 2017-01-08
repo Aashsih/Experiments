@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.head_first.aashi.experiments.R;
+import com.wonderkiln.blurkit.BlurKit;
 
 public class HeartSoundMainActivity extends AppCompatActivity {
 
@@ -32,17 +33,11 @@ public class HeartSoundMainActivity extends AppCompatActivity {
         });
         mBottomNavigationView.inflateMenu(R.menu.heart_sound_ui_experiments_bottom_navigation_bar_menu_items);
         mBottomNavigationView.getMenu().findItem(DEFAULT_MENU_ITEM).setChecked(true);
+
         launchSelectedMenuFragment(mBottomNavigationView.getMenu().findItem(DEFAULT_MENU_ITEM));
-        //mBottomNavigationView.setItemBackgroundResource(R.color.colorPrimary);
     }
 
     private void launchSelectedMenuFragment(MenuItem item){
-        //FragmentManager fragmentManager = getSupportFragmentManager();
-        //Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
-//        if(menuItemFragment == null || !(menuItemFragment instanceof Patients)){
-//            menuItemFragment = new Patients();
-//
-//        }
         Fragment menuItemFragment;
         switch(item.getItemId()){
             case R.id.userProfile:
@@ -51,31 +46,15 @@ public class HeartSoundMainActivity extends AppCompatActivity {
             case R.id.myPatients:
                 menuItemFragment = new Patients();
                 ((Patients) menuItemFragment).setMyPatientClicked(true);
-//                if(currentFragment != null && currentFragment instanceof Patients){
-//                    ((Patients)menuItemFragment).setUpDataForViews();
-//                    ((Patients)menuItemFragment).notifyDataSetHasChanged();
-//                    return;
-//                }
                 break;
             case R.id.sharedPatients:
                 menuItemFragment = new Patients();
                 ((Patients) menuItemFragment).setMyPatientClicked(false);
-//                if(currentFragment != null && currentFragment instanceof Patients){
-//                    ((Patients)menuItemFragment).setUpDataForViews();
-//                    ((Patients)menuItemFragment).notifyDataSetHasChanged();
-//                    ((Patients)menuItemFragment).notifyDataSetHasChanged();
-//                    return;
-//                }
                 break;
 
             default:
                 menuItemFragment = new Patients();
                 ((Patients) menuItemFragment).setMyPatientClicked(true);
-//                if(currentFragment != null && currentFragment instanceof Patients){
-//                    ((Patients)menuItemFragment).setUpDataForViews();
-//                    ((Patients)menuItemFragment).notifyDataSetHasChanged();
-//                    return;
-//                }
                 break;
         }
         getSupportFragmentManager().beginTransaction()

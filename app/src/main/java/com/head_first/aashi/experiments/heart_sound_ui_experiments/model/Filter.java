@@ -168,6 +168,145 @@ public class Filter implements Serializable{
             else{
                 groupHeader3Items.add(new GroupItem("Item3", false));
             }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item4", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item4", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+            if(itemFilters[0].contains("Item3")){
+                groupHeader3Items.add(new GroupItem("Item5", true));
+            }
+            else{
+                groupHeader3Items.add(new GroupItem("Item5", false));
+            }
+
         }
         //This hashMap will actually be created by info that was retrieved from the database based on
         //The Study table and the DoctorsPatient table (this one will determine which Doctors shared)

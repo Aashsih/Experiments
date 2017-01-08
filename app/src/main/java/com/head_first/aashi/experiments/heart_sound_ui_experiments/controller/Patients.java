@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -49,7 +50,7 @@ public class Patients extends Fragment implements SearchView.OnQueryTextListener
 
     private static final String DEFAULT_SEARCH_STRING = "";
 
-    private Fragment filterFragment;
+    private DialogFragment filterFragment;
     private View mRootView;
     private ImageButton mFilterButton;
     private SearchView mSearchView;
@@ -238,10 +239,12 @@ public class Patients extends Fragment implements SearchView.OnQueryTextListener
         Bundle bundle = new Bundle();
         bundle.putSerializable(FilterFragment.FILTER_CONTENT_MAP_TAG, filter);
         filterFragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, filterFragment)
-                .addToBackStack(null)
-                .commit();
+        filterFragment.show(getFragmentManager(), "");
+//        getActivity().getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragmentContainer, filterFragment)
+//                .addToBackStack(null)
+//                .commit();
+
     }
     //Utility Methods for the fragment
     private void setupSearchContent(){
